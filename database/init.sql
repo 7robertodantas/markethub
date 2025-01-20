@@ -1,0 +1,3 @@
+CREATE DATABASE checkout;
+CREATE DATABASE product;
+CREATE DATABASE wallet;
