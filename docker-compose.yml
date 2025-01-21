@@ -9,22 +9,39 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
   checkout:
-    build: ./checkout
+    build:
+      context: ./checkout
+      args:
+        - MAVEN_OPTS=-Dmaven.test.skip=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      - spring.r2dbc.url=r2dbc:postgresql://db:5432/checkout
-      - spring.r2dbc.username=postgres
-      - spring.r2dbc.password=postgres
+      - spring.datasource.url=jdbc:postgresql://db:5432/checkout
+      - spring.datasource.username=postgres
+      - spring.datasource.password=postgres
+    depends_on:
+      - db
   product:
-    build: ./product
+    build: 
+      context: ./product
+      args:
+        - MAVEN_OPTS=-Dmaven.test.skip=true
     environment:
-      - spring.r2dbc.url=r2dbc:postgresql://db:5432/product
-      - spring.r2dbc.username=postgres
-      - spring.r2dbc.password=postgres
+      - spring.datasource.url=jdbc:postgresql://db:5432/product
+      - spring.datasource.username=postgres
+      - spring.datasource.password=postgres
+    depends_on:
+      - db
   wallet:
-    build: ./wallet
+    build:
+      context: ./wallet
+      args:
+        - MAVEN_OPTS=-Dmaven.test.skip=true
     environment:
-      - spring.r2dbc.url=r2dbc:postgresql://db:5432/wallet
-      - spring.r2dbc.username=postgres
-      - spring.r2dbc.password=postgres
+      - spring.datasource.url=jdbc:postgresql://db:5432/wallet
+      - spring.datasource.username=postgres
+      - spring.datasource.password=postgres
+    depends_on:
+      - db
 volumes:
   db-data:
