@@ -13,8 +13,6 @@ services:
       context: ./checkout
       args:
         - MAVEN_OPTS=-Dmaven.test.skip=true
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - spring.datasource.url=jdbc:postgresql://db:5432/checkout
       - spring.datasource.username=postgres
