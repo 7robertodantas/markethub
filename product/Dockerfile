@@ -1,8 +1,11 @@
 # Build stage
 FROM maven:3.9-amazoncorretto-17-alpine AS build
-COPY src /home/app/src
+ARG MAVEN_OPTS
+WORKDIR /home/app
 COPY pom.xml /home/app
-RUN mvn -f /home/app/pom.xml clean test package
+RUN --mount=type=cache,target=/root/.m2 mvn -f /home/app/pom.xml dependency:go-offline -B
+COPY src /home/app/src
+RUN --mount=type=cache,target=/root/.m2 mvn -f /home/app/pom.xml ${MAVEN_OPTS} clean test package
 
 # Package stage
 FROM amazoncorretto:17-alpine3.19-jdk
