@@ -1,4 +1,4 @@
-package br.ufrn.imd.markethub.service.checkout.advice;
+package br.ufrn.imd.markethub.service.checkout.controller;
 
 import br.ufrn.imd.markethub.service.checkout.dto.ErrorDto;
 import br.ufrn.imd.markethub.service.checkout.exception.ServerException;
