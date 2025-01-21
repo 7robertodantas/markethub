@@ -30,8 +30,20 @@ jobs:
         run: ./mvnw verify
         working-directory: ./wallet
 
-      - run: mkdir staging && cp checkout/target/*.jar staging && cp product/target/*.jar staging && cp wallet/target/*.jar staging
-      - uses: actions/upload-artifact@v4
+      - name: Upload Checkout JAR
+        uses: actions/upload-artifact@v4
         with:
-          name: Package
-          path: staging
+          name: checkout-jar
+          path: checkout/target/*.jar
+
+      - name: Upload Product JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: product-jar
+          path: product/target/*.jar
+
+      - name: Upload Wallet JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: wallet-jar
+          path: wallet/target/*.jar
