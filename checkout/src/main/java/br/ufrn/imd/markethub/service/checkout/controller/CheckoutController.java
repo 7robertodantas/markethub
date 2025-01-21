@@ -1,7 +1,8 @@
 package br.ufrn.imd.markethub.service.checkout.controller;
 
-import br.ufrn.imd.markethub.service.checkout.domain.Checkout;
+import br.ufrn.imd.markethub.service.checkout.dto.CheckoutDto;
 import br.ufrn.imd.markethub.service.checkout.dto.CheckoutRequestDto;
+import br.ufrn.imd.markethub.service.checkout.exception.ServerException;
 import br.ufrn.imd.markethub.service.checkout.service.CheckoutService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,20 +26,20 @@ public class CheckoutController {
     private final CheckoutService service;
 
     @PostMapping
-    public ResponseEntity<Checkout> submitCheckout(@RequestBody CheckoutRequestDto checkoutRequest) {
-        final Checkout checkout = service.createCheckout(checkoutRequest);
+    public ResponseEntity<CheckoutDto> submitCheckout(@RequestBody CheckoutRequestDto checkoutRequest) {
+        final CheckoutDto checkout = service.createCheckout(checkoutRequest);
         return ResponseEntity.ok(checkout);
     }
 
     @GetMapping("/{checkoutId}")
-    public ResponseEntity<Checkout> getCheckoutStatus(@PathVariable UUID checkoutId) {
-        final Optional<Checkout> checkout = service.findById(checkoutId);
-        return checkout.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<CheckoutDto> getCheckoutStatus(@PathVariable UUID checkoutId) {
+        final Optional<CheckoutDto> checkout = service.findById(checkoutId);
+        return checkout.map(ResponseEntity::ok).orElseThrow(ServerException::notFound);
     }
 
     @GetMapping("/history/{userId}")
-    public ResponseEntity<Page<Checkout>> getCheckoutHistory(@PathVariable UUID userId, Pageable pageable) {
-        final Page<Checkout> checkouts = service.findByUserId(userId, pageable);
+    public ResponseEntity<Page<CheckoutDto>> getCheckoutHistory(@PathVariable UUID userId, Pageable pageable) {
+        final Page<CheckoutDto> checkouts = service.findByUserId(userId, pageable);
         return ResponseEntity.ok(checkouts);
     }
 }
