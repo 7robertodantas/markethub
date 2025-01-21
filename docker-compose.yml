@@ -8,6 +8,8 @@ services:
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
+    ports:
+      - "5432:5432"
   checkout:
     build:
       context: ./checkout
@@ -19,6 +21,8 @@ services:
       - spring.datasource.password=postgres
     depends_on:
       - db
+    ports:
+      - "8081:8080"
   product:
     build: 
       context: ./product
@@ -30,6 +34,8 @@ services:
       - spring.datasource.password=postgres
     depends_on:
       - db
+    ports:
+      - "8082:8080"
   wallet:
     build:
       context: ./wallet
@@ -41,5 +47,7 @@ services:
       - spring.datasource.password=postgres
     depends_on:
       - db
+    ports:
+      - "8083:8080"
 volumes:
   db-data:
