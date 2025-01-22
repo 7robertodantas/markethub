@@ -21,6 +21,9 @@ public class ProductDto {
     @JsonProperty("name")
     private String name;
 
+    @JsonProperty("user_id")
+    private UUID userId;
+
     @JsonProperty("value")
     private BigDecimal value;
 
