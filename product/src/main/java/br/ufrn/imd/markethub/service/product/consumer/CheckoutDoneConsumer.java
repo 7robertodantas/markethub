@@ -14,6 +14,8 @@ import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.CountDownLatch;
+
 @Component
 @AllArgsConstructor
 public class CheckoutDoneConsumer {
@@ -22,6 +24,8 @@ public class CheckoutDoneConsumer {
 
     private final ObjectMapper objectMapper;
     private final ProductService productService;
+
+    private CountDownLatch latch;
 
     @SneakyThrows
     @RabbitListener(bindings = @QueueBinding(
@@ -39,6 +43,8 @@ public class CheckoutDoneConsumer {
         } catch (Exception e) {
             logger.error("Failed to process checkout_done for product ID: {}. Reason: {}",
                     checkoutDoneDto.getProductId(), e.getMessage(), e);
+        } finally {
+            latch.countDown();
         }
     }
 
