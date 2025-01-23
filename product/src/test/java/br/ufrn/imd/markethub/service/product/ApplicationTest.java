@@ -6,6 +6,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -23,8 +24,8 @@ abstract class ApplicationTest {
 
 	@Container
 	@ServiceConnection
-	static RabbitMQContainer rabbitmq = new RabbitMQContainer("rabbitmq:3.13.7-management-alpine");
-
+	static RabbitMQContainer rabbitmq = new RabbitMQContainer("rabbitmq:3.13.7-management-alpine")
+			.withExposedPorts(5672, 15672);
 	@Autowired
 	protected ObjectMapper objectMapper;
 
