@@ -1,0 +1,23 @@
+@startuml
+
+skin rose
+
+title Use Case: Product Service Flow 
+
+actor client
+participant "product_service"
+database postgres
+queue rabbitmq
+
+== A checkout is done ==
+
+  rabbitmq -> "product_service" : **checkout_done (event)**
+  activate product_service
+  product_service -> product_service : decrement product stock quantity
+  product_service -> postgres : Update quantity
+  activate postgres
+  postgres --> product_service
+  deactivate postgres
+  deactivate product_service
+  
+@enduml

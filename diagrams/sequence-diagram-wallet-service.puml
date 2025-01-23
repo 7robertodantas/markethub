@@ -1,0 +1,35 @@
+@startuml
+
+skin rose
+
+title Use Case: Wallet Service Flow 
+
+actor client
+participant "wallet_service"
+database postgres
+queue rabbitmq
+
+== A checkout is submitted ==
+
+  rabbitmq -> "wallet_service" : **checkout_submitted (event)**
+  activate wallet_service
+  wallet_service -> wallet_service : check user has enough funds?
+  
+  == Wallet emmit an event ==
+  
+  alt 
+    wallet_service -> postgres : Update funds
+    activate postgres
+    postgres --> wallet_service
+    deactivate postgres
+    
+    wallet_service -> rabbitmq : withdraw_done
+    activate rabbitmq
+    deactivate rabbitmq
+  else 
+    wallet_service -> rabbitmq : wallet_failed
+    activate rabbitmq
+    deactivate rabbitmq
+  end
+  
+@enduml

@@ -1,0 +1,41 @@
+@startuml
+
+skin rose
+
+title Use Case: Checkout Service Flow 
+
+actor client
+participant "checkout_service"
+database postgres
+queue rabbitmq
+
+== User submit a checkout ==
+
+  client -> "checkout_service" : POST /checkout (user_id, products)
+  activate "checkout_service"
+  
+  "checkout_service" -> postgres : Persist checkout
+  activate postgres
+  postgres --> "checkout_service"
+  deactivate postgres
+  
+  "checkout_service" -> rabbitmq : **checkout_submitted (event)**
+  activate rabbitmq
+  rabbitmq --> "checkout_service" 
+  deactivate rabbitmq
+  
+  "checkout_service" --> "client" : Accepted
+  deactivate "checkout_service"
+
+== Checkout waits for wallet withdrawal ==
+
+  rabbitmq -> "checkout_service" : **wallet_withdraw (event)**
+  activate "checkout_service"
+  "checkout_service" -> postgres : Update checkout
+  activate postgres
+  postgres --> "checkout_service"
+  deactivate postgres
+  "checkout_service" -> rabbitmq : **checkout_done (event)**
+  deactivate checkout_service
+
+@enduml
