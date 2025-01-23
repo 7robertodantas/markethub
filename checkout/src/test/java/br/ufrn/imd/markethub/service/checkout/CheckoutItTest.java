@@ -1,5 +1,6 @@
 package br.ufrn.imd.markethub.service.checkout;
 
+import br.ufrn.imd.markethub.service.checkout.base.TestBase;
 import br.ufrn.imd.markethub.service.checkout.domain.CheckoutStatus;
 import br.ufrn.imd.markethub.service.checkout.dto.CheckoutDto;
 import br.ufrn.imd.markethub.service.checkout.dto.CheckoutRequestDto;
@@ -20,7 +21,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class CheckoutItTest extends ApplicationTest {
+class CheckoutItTest extends TestBase {
 
     @Test
     void testCheckoutSuccessFlow() throws Exception {
