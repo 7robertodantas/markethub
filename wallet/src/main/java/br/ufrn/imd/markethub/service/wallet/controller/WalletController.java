@@ -6,6 +6,7 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.NoArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,12 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/wallet")
-@AllArgsConstructor
+//@AllArgsConstructor
 
 public class WalletController {
 
     @Data
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class WalletBalanceResponse{
         private String userId;
         private int balance;
@@ -27,6 +29,7 @@ public class WalletController {
 
     @Data
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class WalletHistoryResponse{
         private String timestamp;
         private int change;
