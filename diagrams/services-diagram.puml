@@ -1,0 +1,19 @@
+@startuml
+
+package "Services" {
+    node "Checkout Service (API)" {
+        "POST /checkout" : Submeter a compra
+        "GET /checkout/{checkoutId}" : Consultar status de compra
+        "GET /checkout/history/{userId}" : Histórico de compras
+    }
+    node "Product Service (API)" {
+        "GET /products" : Listar produtos
+        "GET /products/{id}" : Detalhes de produto
+    }
+    node "Wallet Service (API)" {
+        "GET /wallet/balance/{userId}" : Consultar saldo
+        "GET /wallet/history/{userId}" : Histórico do saldo
+    }
+}
+
+@enduml

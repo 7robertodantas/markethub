@@ -1,0 +1,30 @@
+@startuml
+
+package "Services" {
+    node "Checkout Service" {
+    }
+    node "Product Service" {
+    }
+    node "Wallet Service" {
+    }
+}
+
+package "Events" {
+    queue "checkout_submitted"
+    queue "checkout_done"
+    queue "checkout_failed"
+    queue "wallet_withdraw"
+    queue "wallet_failed"
+}
+
+"Checkout Service" -down-> "checkout_submitted" : emits
+"Checkout Service" -down-> "checkout_done" : emits
+"Checkout Service" -down-> "checkout_failed" : emits
+"checkout_done" -down-> "Product Service" : listens
+
+"checkout_submitted" -up-> "Wallet Service" : listens
+"checkout_failed" -up-> "Wallet Service" : listens
+"Wallet Service" -down-> "wallet_withdraw" : emits
+"Wallet Service" -down-> "wallet_failed" : emits
+
+@enduml
