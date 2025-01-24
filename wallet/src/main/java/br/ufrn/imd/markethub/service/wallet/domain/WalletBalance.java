@@ -2,7 +2,6 @@ package br.ufrn.imd.markethub.service.wallet.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -11,15 +10,12 @@ import java.util.UUID;
 
 @Data
 @Entity
-@Table(name = "wallet")
-public class Wallet {
+@Table(name = "wallet_balance")
+public class WalletBalance {
     @Id
-    @GeneratedValue
-    private UUID id;
-
     @Column(name = "user_id")
     private UUID userId;
 
     @Column(name = "amount")
-    private Integer amount;
+    private Long amount;
 }
