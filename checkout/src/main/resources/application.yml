@@ -1,3 +1,6 @@
+logging:
+  level:
+    br.ufrn.imd.markethub: DEBUG
 spring:
   application:
     name: checkout
@@ -21,3 +24,7 @@ spring:
     baselineOnMigrate: true
     validateOnMigrate: true
     locations: classpath:db/migration
+
+third-party:
+  product-service:
+    url: http://localhost:8080

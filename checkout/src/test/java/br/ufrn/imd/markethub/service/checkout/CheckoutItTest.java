@@ -4,8 +4,12 @@ import br.ufrn.imd.markethub.service.checkout.base.TestBase;
 import br.ufrn.imd.markethub.service.checkout.domain.CheckoutStatus;
 import br.ufrn.imd.markethub.service.checkout.dto.CheckoutDto;
 import br.ufrn.imd.markethub.service.checkout.dto.CheckoutRequestDto;
+import br.ufrn.imd.markethub.service.checkout.thirdparty.product.ProductDto;
 import br.ufrn.imd.markethub.service.checkout.thirdparty.wallet.WithdrawDoneDto;
 import br.ufrn.imd.markethub.service.checkout.thirdparty.wallet.WithdrawFailedDto;
+import com.github.tomakehurst.wiremock.client.WireMock;
+import lombok.SneakyThrows;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
@@ -23,14 +27,30 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class CheckoutItTest extends TestBase {
 
+    private final UUID userId = UUID.fromString("ec408cc0-e981-4673-bd1b-905aaf96342f");
+    private final ProductDto product = ProductDto.builder()
+            .id(UUID.fromString("740c6e0e-2653-41f2-b5e4-b669a037c2f5"))
+            .name("Test Product")
+            .price(200L)
+            .quantity(10L)
+            .build();
+    final CheckoutRequestDto dto = CheckoutRequestDto.builder()
+            .userId(userId)
+            .productIds(List.of(product.getId()))
+            .build();
+
+    @BeforeEach
+    void clearWiremock() {
+        wireMock.resetMappings();
+    }
+
     @Test
-    void testCheckoutSuccessFlow() throws Exception {
-        final UUID userId = UUID.fromString("ec408cc0-e981-4673-bd1b-905aaf96342f");
-        final UUID product = UUID.fromString("baaf3a87-7cbd-433e-8e2d-e99a8649637a");
-        final CheckoutRequestDto dto = CheckoutRequestDto.builder()
-                .userId(userId)
-                .productIds(List.of(product))
-                .build();
+    @SneakyThrows
+    void testCheckoutSuccessFlow() {
+        wireMock.register(WireMock.get(WireMock.urlEqualTo("/products/" + product.getId()))
+                .willReturn(WireMock.aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(objectMapper.writeValueAsString(product))));
 
         // First we submit a checkout
         final CheckoutDto created = submitCheckout(dto);
@@ -38,6 +58,8 @@ class CheckoutItTest extends TestBase {
         assertThat(checkoutId).isNotNull();
         assertThat(created.getUserId()).isEqualTo(userId);
         assertThat(created.getCreatedAt()).isNotNull();
+        assertThat(created.getProductIds()).isNotEmpty();
+        assertThat(created.getTotal()).isPositive();
         assertThat(created.getStatus()).isEqualTo(CheckoutStatus.SUBMITTED);
 
         // We are able to retrieve it
@@ -51,7 +73,8 @@ class CheckoutItTest extends TestBase {
         rabbitTemplate.convertAndSend("wallet", "withdraw_done", WithdrawDoneDto.builder()
                 .userId(userId)
                 .amount(100)
-                .checkoutId(checkoutId).build());
+                .checkoutId(checkoutId)
+                .build());
 
         await()
                 .atMost(Duration.ofSeconds(1))
@@ -61,12 +84,10 @@ class CheckoutItTest extends TestBase {
 
     @Test
     void testCheckoutFailedFlow() throws Exception {
-        final UUID userId = UUID.fromString("729d74ff-6e4f-4690-b93d-a0f328892ddf");
-        final UUID product = UUID.fromString("b2d969f5-f64b-4abc-808c-9f0a2ea25ea6");
-        final CheckoutRequestDto dto = CheckoutRequestDto.builder()
-                .userId(userId)
-                .productIds(List.of(product))
-                .build();
+        wireMock.register(WireMock.get(WireMock.urlEqualTo("/products/" + product.getId()))
+                .willReturn(WireMock.aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(objectMapper.writeValueAsString(product))));
 
         // First we submit a checkout
         final CheckoutDto created = submitCheckout(dto);

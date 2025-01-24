@@ -1,4 +1,4 @@
-package br.ufrn.imd.markethub.service.product.dto;
+package br.ufrn.imd.markethub.service.checkout.thirdparty.product;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

@@ -1,13 +1,12 @@
-package br.ufrn.imd.markethub.service.checkout.base;
+package br.ufrn.imd.markethub.service.wallet.base;
 
-import br.ufrn.imd.markethub.service.checkout.CheckoutApplication;
+import br.ufrn.imd.markethub.service.wallet.WalletApplication;
+import br.ufrn.imd.markethub.service.wallet.repository.WalletRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.tomakehurst.wiremock.client.WireMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.env.Environment;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -17,7 +16,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 @ActiveProfiles("test")
 @SpringBootTest(
-        classes = { CheckoutApplication.class },
+        classes = { WalletApplication.class },
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @ContextConfiguration(
@@ -41,9 +40,7 @@ public abstract class TestBase {
     protected RabbitTemplate rabbitTemplate;
 
     @Autowired
-    protected Environment environment;
-
-    protected WireMock wireMock;
+    protected WalletRepository walletRepository;
 
     protected MockMvc mockMvc;
 
@@ -51,10 +48,6 @@ public abstract class TestBase {
     public void setup() {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(context)
-                .build();
-        wireMock = WireMock.create()
-                .host(environment.getProperty("wiremock.host"))
-                .port(environment.getProperty("wiremock.port", Integer.class))
                 .build();
     }
 

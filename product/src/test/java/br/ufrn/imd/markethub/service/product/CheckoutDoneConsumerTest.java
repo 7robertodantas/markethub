@@ -25,7 +25,7 @@ class CheckoutDoneConsumerTest extends TestBase {
                 .quantity(2)
                 .build();
 
-        log.info("Enviando mensagem para a fila checkout_done...");
+        log.info("Sending message to checkout_done...");
         rabbitTemplate.convertAndSend("checkout", "checkout_done", dto);
 
         await()
@@ -40,8 +40,8 @@ class CheckoutDoneConsumerTest extends TestBase {
     private Product createProduct() {
         final Product product = new Product();
         product.setName("Test Product");
-        product.setQuantity(10);
-        product.setValue(BigDecimal.valueOf(100));
+        product.setQuantity(10L);
+        product.setPrice(100L);
         return productRepository.save(product);
     }
 }

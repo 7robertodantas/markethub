@@ -1,6 +1,5 @@
-package br.ufrn.imd.markethub.service.checkout.dto;
+package br.ufrn.imd.markethub.service.wallet.thirdparty.checkout;
 
-import br.ufrn.imd.markethub.service.checkout.domain.CheckoutStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
