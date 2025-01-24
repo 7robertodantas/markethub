@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -24,6 +25,12 @@ public class CheckoutDto {
 
     @JsonProperty("status")
     private CheckoutStatus status;
+
+    @JsonProperty("product_ids")
+    private List<UUID> productIds;
+
+    @JsonProperty("total")
+    private Long total;
 
     @JsonProperty("created_at")
     @JsonFormat(shape=JsonFormat.Shape.STRING, timezone = "UTC")

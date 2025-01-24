@@ -27,6 +27,8 @@ public class CheckoutServiceImpl implements CheckoutService {
         final Checkout checkout = new Checkout();
         checkout.setUserId(dto.getUserId());
         checkout.setStatus(CheckoutStatus.SUBMITTED);
+        checkout.setProductIds(dto.getProductIds());
+        checkout.setTotal(1L); // todo change me
         final Checkout saved = repository.save(checkout);
         final CheckoutDto checkoutDto = toDto(saved);
         publisher.sendCheckoutSubmitted(checkoutDto);
@@ -70,6 +72,8 @@ public class CheckoutServiceImpl implements CheckoutService {
                 .userId(checkout.getUserId())
                 .status(checkout.getStatus())
                 .createdAt(checkout.getCreatedAt())
+                .productIds(checkout.getProductIds())
+                .total(checkout.getTotal())
                 .build();
     }
 }
