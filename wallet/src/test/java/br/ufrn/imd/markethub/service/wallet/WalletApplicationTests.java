@@ -1,19 +1,9 @@
 package br.ufrn.imd.markethub.service.wallet;
 
+import br.ufrn.imd.markethub.service.wallet.base.TestBase;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Testcontainers
-class WalletApplicationTests {
-
-	@Container
-	@ServiceConnection
-	static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:17-alpine3.21");
+class WalletApplicationTests extends TestBase {
 
 	@Test
 	void contextLoads() {
