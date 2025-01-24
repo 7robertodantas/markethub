@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 @Data
@@ -21,9 +20,9 @@ public class ProductDto {
     @JsonProperty("name")
     private String name;
 
-    @JsonProperty("value")
-    private BigDecimal value;
+    @JsonProperty("price")
+    private Long price;
 
     @JsonProperty("quantity")
-    private Integer quantity;
+    private Long quantity;
 }
