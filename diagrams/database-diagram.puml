@@ -1,0 +1,44 @@
+@startuml
+
+package "checkout" {
+    entity "checkout" {
+        * id : uuid [PK]
+        --
+        * user_id : uuid
+        * status : VARCHAR(50)
+        * total : BIGINT
+        * product_ids : jsonb
+        * created_at : TIMESTAMP
+    }
+}
+
+package "product" {
+    entity "product" {
+        * id : uuid [PK]
+        --
+        * name : VARCHAR(255)
+        * price : BIGINT
+        * quantity : BIGINT
+    }
+}
+
+package "wallet" {
+    entity "wallet_balance" {
+        * user_id : uuid [PK]
+        --
+        * amount : BIGINT
+    }
+
+    entity "wallet_history" {
+        * id : uuid [PK]
+        --
+        * user_id : uuid
+        * amount : BIGINT
+        * type : VARCHAR(50)
+        * timestamp : TIMESTAMP
+    }
+
+    wallet_history::user_id --> wallet_balance::user_id
+}
+
+@enduml
