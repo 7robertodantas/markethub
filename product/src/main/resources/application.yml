@@ -5,6 +5,11 @@ spring:
     password: postgres
   application:
     name: product
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: username
+    password: password
   jpa:
     open-in-view: false
     generate-ddl: false
