@@ -2,10 +2,12 @@ package br.ufrn.imd.markethub.service.checkout.base;
 
 import br.ufrn.imd.markethub.service.checkout.CheckoutApplication;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.tomakehurst.wiremock.client.WireMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.env.Environment;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -38,12 +40,21 @@ public abstract class TestBase {
     @Autowired
     protected RabbitTemplate rabbitTemplate;
 
+    @Autowired
+    protected Environment environment;
+
+    protected WireMock wireMock;
+
     protected MockMvc mockMvc;
 
     @BeforeEach
     public void setup() {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(context)
+                .build();
+        wireMock = WireMock.create()
+                .host(environment.getProperty("wiremock.host"))
+                .port(environment.getProperty("wiremock.port", Integer.class))
                 .build();
     }
 

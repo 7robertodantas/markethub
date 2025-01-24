@@ -7,11 +7,15 @@ import br.ufrn.imd.markethub.service.checkout.dto.CheckoutRequestDto;
 import br.ufrn.imd.markethub.service.checkout.exception.ServerException;
 import br.ufrn.imd.markethub.service.checkout.producer.CheckoutPublisher;
 import br.ufrn.imd.markethub.service.checkout.repository.CheckoutRepository;
+import br.ufrn.imd.markethub.service.checkout.thirdparty.product.ProductClient;
+import br.ufrn.imd.markethub.service.checkout.thirdparty.product.ProductDto;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,15 +24,25 @@ import java.util.UUID;
 public class CheckoutServiceImpl implements CheckoutService {
 
     private final CheckoutPublisher publisher;
+    private final ProductClient productClient;
     private final CheckoutRepository repository;
 
     @Override
     public CheckoutDto createCheckout(CheckoutRequestDto dto) {
+        final List<ProductDto> products = Optional.ofNullable(dto.getProductIds())
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .map(productClient::getProduct)
+                .toList();
+
         final Checkout checkout = new Checkout();
         checkout.setUserId(dto.getUserId());
         checkout.setStatus(CheckoutStatus.SUBMITTED);
         checkout.setProductIds(dto.getProductIds());
-        checkout.setTotal(1L); // todo change me
+        checkout.setTotal(products.stream()
+                .map(ProductDto::getPrice)
+                .reduce(0L, Long::sum));
+
         final Checkout saved = repository.save(checkout);
         final CheckoutDto checkoutDto = toDto(saved);
         publisher.sendCheckoutSubmitted(checkoutDto);

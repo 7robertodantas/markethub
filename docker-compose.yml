@@ -31,6 +31,9 @@ services:
       - spring.rabbitmq.port=5672
       - spring.rabbitmq.username=rabbitmq
       - spring.rabbitmq.password=rabbitmq
+      - third-party.checkout-service.url=http://checkout:8080
+      - third-party.wallet-service.url=http://wallet:8080
+      - third-party.product-service.url=http://product:8080
     depends_on:
       - db
       - rabbitmq
@@ -49,6 +52,9 @@ services:
       - spring.rabbitmq.port=5672
       - spring.rabbitmq.username=rabbitmq
       - spring.rabbitmq.password=rabbitmq
+      - third-party.checkout-service.url=http://checkout:8080
+      - third-party.wallet-service.url=http://wallet:8080
+      - third-party.product-service.url=http://product:8080  
     depends_on:
       - db
       - rabbitmq
@@ -67,6 +73,9 @@ services:
       - spring.rabbitmq.port=5672
       - spring.rabbitmq.username=rabbitmq
       - spring.rabbitmq.password=rabbitmq
+      - third-party.checkout-service.url=http://checkout:8080
+      - third-party.wallet-service.url=http://wallet:8080
+      - third-party.product-service.url=http://product:8080      
     depends_on:
       - db
       - rabbitmq
