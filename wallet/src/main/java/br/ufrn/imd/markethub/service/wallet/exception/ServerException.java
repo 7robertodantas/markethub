@@ -19,4 +19,11 @@ public class ServerException extends RuntimeException {
             .message("Not Found")
             .build());
   }
+
+  public static ServerException conflict(String reason) {
+    return new ServerException(ErrorDto.builder()
+            .code(409)
+            .message(reason)
+            .build());
+  }
 }

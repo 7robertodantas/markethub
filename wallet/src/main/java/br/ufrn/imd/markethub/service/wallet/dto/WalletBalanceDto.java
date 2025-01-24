@@ -16,5 +16,5 @@ public class WalletBalanceDto {
     @JsonProperty("user_id")
     private UUID userId;
     @JsonProperty("amount")
-    private Integer amount;
+    private Long amount;
 }

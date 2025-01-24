@@ -1,7 +1,7 @@
-package br.ufrn.imd.markethub.service.product.controller;
+package br.ufrn.imd.markethub.service.wallet.controller;
 
-import br.ufrn.imd.markethub.service.product.dto.ErrorDto;
-import br.ufrn.imd.markethub.service.product.exception.ServerException;
+import br.ufrn.imd.markethub.service.wallet.dto.ErrorDto;
+import br.ufrn.imd.markethub.service.wallet.exception.ServerException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

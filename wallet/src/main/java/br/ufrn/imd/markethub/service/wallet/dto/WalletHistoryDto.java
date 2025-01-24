@@ -15,7 +15,7 @@ import java.time.Instant;
 @Builder
 public class WalletHistoryDto {
     @JsonProperty("amount")
-    private Integer amount;
+    private Long amount;
     @JsonProperty("type")
     private TransactionType type;
     @JsonProperty("timestamp")

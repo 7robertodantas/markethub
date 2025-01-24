@@ -1,4 +1,4 @@
-package br.ufrn.imd.markethub.service.product.config;
+package br.ufrn.imd.markethub.service.wallet.config;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMqTestConfig {
 
     @Bean
-    public Queue checkoutDone() {
-        return new Queue("checkout_done", true);
+    public Queue checkoutSubmitted() {
+        return new Queue("checkout_submitted", true);
     }
 
     @Bean
@@ -21,9 +21,9 @@ public class RabbitMqTestConfig {
     }
 
     @Bean
-    public Binding bindingCheckoutDone(Queue checkoutDone, TopicExchange checkoutExchange) {
-        return BindingBuilder.bind(checkoutDone)
+    public Binding bindingCheckoutSubmitted(Queue checkoutSubmitted, TopicExchange checkoutExchange) {
+        return BindingBuilder.bind(checkoutSubmitted)
                 .to(checkoutExchange)
-                .with("checkout_done");
+                .with("checkout_submitted");
     }
 }

@@ -1,3 +1,6 @@
+logging:
+  level:
+    br.ufrn.imd.markethub: DEBUG
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/wallet
@@ -5,6 +8,11 @@ spring:
     password: postgres
   application:
     name: wallet
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: username
+    password: password
   jpa:
     open-in-view: false
     generate-ddl: false

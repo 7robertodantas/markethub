@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -17,14 +18,14 @@ import java.util.UUID;
 @Table(name = "wallet_history")
 public class WalletHistory {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @Column(name = "user_id")
     private UUID userId;
 
     @Column(name = "amount")
-    private Integer amount;
+    private Long amount;
 
     @Column(name = "type")
     @Enumerated(EnumType.STRING)

@@ -1,8 +1,7 @@
-package br.ufrn.imd.markethub.service.product.consumer;
+package br.ufrn.imd.markethub.service.wallet.consumer;
 
-import br.ufrn.imd.markethub.service.product.dto.CheckoutDoneDto;
-import br.ufrn.imd.markethub.service.product.service.ProductService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import br.ufrn.imd.markethub.service.wallet.service.WalletService;
+import br.ufrn.imd.markethub.service.wallet.thirdparty.checkout.CheckoutDto;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
@@ -16,26 +15,24 @@ import org.springframework.stereotype.Component;
 
 @Component
 @AllArgsConstructor
-public class CheckoutDoneConsumer {
+public class CheckoutSubmittedConsumer {
 
-    private static final Logger logger = LoggerFactory.getLogger(CheckoutDoneConsumer.class);
+    private static final Logger logger = LoggerFactory.getLogger(CheckoutSubmittedConsumer.class);
 
-    private final ObjectMapper objectMapper;
-    private final ProductService productService;
+    private final WalletService walletService;
 
     @SneakyThrows
     @RabbitListener(bindings = @QueueBinding(
-            value = @Queue(value = "checkout_done", durable = "true"),
+            value = @Queue(value = "checkout_submitted", durable = "true"),
             exchange = @Exchange(value = "checkout", type = ExchangeTypes.TOPIC)
     ))
-    public void handleCheckoutDone(CheckoutDoneDto dto) {
+    public void handleCheckout(CheckoutDto dto) {
         logger.info("Received checkout_done message: {}", dto);
         try {
-            productService.processCheckoutDone(dto);
-            logger.info("Successfully processed checkout_done for product ID: {}", dto.getProductId());
+            walletService.applyCheckout(dto);
+            logger.info("Successfully processed checkout_submitted");
         } catch (Exception e) {
-            logger.error("Failed to process checkout_done for product ID: {}. Reason: {}",
-                    dto.getProductId(), e.getMessage(), e);
+            logger.error("Failed to process checkout_submitted", e);
         }
     }
 }

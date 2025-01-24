@@ -1,4 +1,4 @@
-package br.ufrn.imd.markethub.service.product.config;
+package br.ufrn.imd.markethub.service.wallet.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;

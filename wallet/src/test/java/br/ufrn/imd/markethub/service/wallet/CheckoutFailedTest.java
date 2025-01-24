@@ -15,21 +15,23 @@ import java.util.logging.Logger;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
-class CheckoutWithdrawTest extends TestBase {
+class CheckoutFailedTest extends TestBase {
 
-    private static final Logger log = Logger.getLogger(CheckoutWithdrawTest.class.getName());
-    private static final UUID USER_ID = UUID.fromString("1657d1f4-905a-4174-b7bf-c34a769df709");
+    private static final Logger log = Logger.getLogger(CheckoutFailedTest.class.getName());
+    private static final UUID USER_ID = UUID.fromString("e86fb64c-3b15-4386-b6ff-4dd2635a41a8");
+    private static final Long USER_BALANCE = 1000L;
+    private static final Long CHECKOUT_TOTAL = 1200L;
 
     @Test
     void testHandleCheckoutSubmittedWithdraw() {
         createWallet();
 
         final CheckoutDto dto = CheckoutDto.builder()
-                .id(UUID.fromString("ee53e637-bef5-47ec-afa1-ac1696e8fdd0"))
+                .id(UUID.fromString("88beab88-84f5-45b7-ba16-2ec2c15c6215"))
                 .userId(USER_ID)
-                .total(800L)
+                .total(CHECKOUT_TOTAL)
                 .status(CheckoutStatus.SUBMITTED)
-                .productIds(List.of(UUID.fromString("ee9f7f4a-93b1-487c-8eca-eec0a4ca1f41")))
+                .productIds(List.of(UUID.fromString("cd812e48-6306-4a4c-9721-79e01c854569")))
                 .createdAt(LocalDateTime.now())
                 .build();
 
@@ -41,14 +43,14 @@ class CheckoutWithdrawTest extends TestBase {
                 .pollInterval(Duration.ofMillis(250))
                 .untilAsserted(() -> {
                     final WalletBalance updated = walletRepository.findByUserId(USER_ID);
-                    assertThat(updated.getAmount()).isEqualTo(200);
+                    assertThat(updated.getAmount()).isEqualTo(USER_BALANCE);
                 });
     }
 
     private WalletBalance createWallet() {
         final WalletBalance wallet = new WalletBalance();
         wallet.setUserId(USER_ID);
-        wallet.setAmount(1000L);
+        wallet.setAmount(USER_BALANCE);
         return walletRepository.save(wallet);
     }
 }

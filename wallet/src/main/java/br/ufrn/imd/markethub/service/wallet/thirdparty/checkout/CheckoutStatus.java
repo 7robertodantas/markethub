@@ -1,4 +1,4 @@
-package br.ufrn.imd.markethub.service.checkout.domain;
+package br.ufrn.imd.markethub.service.wallet.thirdparty.checkout;
 
 public enum CheckoutStatus {
     SUBMITTED,
